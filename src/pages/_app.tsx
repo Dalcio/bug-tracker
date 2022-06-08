@@ -2,9 +2,11 @@ import { GetServerSidePropsContext } from 'next';
 import { useState } from 'react';
 import { AppProps } from 'next/app';
 import { getCookie, setCookies } from 'cookies-next';
-import Head from 'next/head';
 import { MantineProvider, ColorScheme, ColorSchemeProvider } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
+
+import Head from 'next/head';
+import GlobalStyles from '@styles/GlobalStyles';
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
@@ -13,13 +15,13 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const toggleColorScheme = (value?: ColorScheme) => {
     const nextColorScheme = value || (colorScheme === 'dark' ? 'light' : 'dark');
     setColorScheme(nextColorScheme);
-    setCookies('mantine-color-scheme', nextColorScheme, { maxAge: 60 * 60 * 24 * 30 });
+    setCookies('bug-tracker-color-scheme', nextColorScheme, { maxAge: 60 * 60 * 24 * 30 });
   };
 
   return (
     <>
       <Head>
-        <title>Mantine next example</title>
+        <title>Bug Tracker</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
         <link rel="shortcut icon" href="/favicon.svg" />
       </Head>
@@ -29,6 +31,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
           <NotificationsProvider>
             <Component {...pageProps} />
           </NotificationsProvider>
+          <GlobalStyles />
         </MantineProvider>
       </ColorSchemeProvider>
     </>
@@ -36,5 +39,5 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 }
 
 App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
-  colorScheme: getCookie('mantine-color-scheme', ctx) || 'light',
+  colorScheme: getCookie('bug-tracker-color-scheme', ctx) || 'light',
 });

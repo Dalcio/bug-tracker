@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import { TrackFilter } from '.';
+
+import TrackFilter from '.';
 
 describe('TrackFilter component', () => {
   it('has correct Next.js theming section link', () => {

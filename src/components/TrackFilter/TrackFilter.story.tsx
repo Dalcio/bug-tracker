@@ -1,4 +1,4 @@
-import { TrackFilter } from '.';
+import TrackFilter from '.';
 
 export default {
   title: 'Filter Filter',

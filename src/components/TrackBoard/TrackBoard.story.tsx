@@ -1,4 +1,4 @@
-import { TrackBoard } from '.';
+import TrackBoard from '.';
 
 export default {
   title: 'Track Board',

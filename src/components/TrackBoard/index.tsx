@@ -1,5 +1,3 @@
-import React from 'react';
-
-export function TrackBoard() {
+export default function TrackBoard() {
   return <div>Track Board</div>;
 }

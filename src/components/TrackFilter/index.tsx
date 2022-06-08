@@ -1,5 +1,3 @@
-import React from 'react';
-
-export function TrackFilter() {
+export default function TrackFilter() {
   return <div>TrackFilter</div>;
 }
