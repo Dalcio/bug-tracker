@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 
-import TrackFilter from '.';
+import TrackOptions from '.';
 
-describe('TrackFilter component', () => {
+describe('Track Options component', () => {
   it('has correct Next.js theming section link', () => {
-    render(<TrackFilter />);
+    render(<TrackOptions />);
     expect(screen.getByText('this guide')).toHaveAttribute(
       'href',
       'https://mantine.dev/theming/next/'

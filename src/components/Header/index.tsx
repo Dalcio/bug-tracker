@@ -1,4 +1,4 @@
-import { Row } from '@components/Mantine';
+import { Row } from '@styles/core';
 import { useHeaderStyles } from './Header.styles';
 
 import ColorSchemeToggle from '@components/ColorSchemeToggle';
@@ -15,8 +15,13 @@ export default function Header() {
   const isSigned = true;
 
   return (
-    <Row className={classes.container} p="sm" justify={(isSigned && 'space-between') || 'end'}>
-      {(!isSigned && <SignInButton />) || (
+    <Row className={classes.container} justify={(isSigned && 'space-between') || 'end'}>
+      {(!isSigned && (
+        <>
+          <ColorSchemeToggle />
+          <SignInButton />
+        </>
+      )) || (
         <>
           <Workspaces />
           <Row spacing="md">

@@ -5,6 +5,7 @@ export const useHeaderStyles = createStyles((theme) => ({
     border: `1px solid ${theme.colors.blue[7]}`,
     borderRadius: theme.radius.md,
     alignItems: 'center',
+    padding: theme.spacing.sm,
   },
   title: {
     color: theme.colorScheme === 'dark' ? theme.white : theme.black,

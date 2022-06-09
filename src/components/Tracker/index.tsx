@@ -23,7 +23,6 @@ const reducer = (state: any, action: string) => {
 export default function Tracker({ children }: { children: ReactChild[] | ReactChild }) {
   return (
     <TrackerContext.Provider value={useReducer(reducer, INITIAL_STATE)}>
-      Tracker Area
       <Stack style={{ flexGrow: 1 }}>{children}</Stack>
     </TrackerContext.Provider>
   );
