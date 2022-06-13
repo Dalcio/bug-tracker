@@ -1,3 +1,6 @@
+import { TextInput } from '@mantine/core';
+import { MagnifyingGlassIcon } from '@modulz/radix-icons';
+
 export default function SearchTask() {
-  return <div>SearchTask</div>;
+  return <TextInput placeholder="Search tasks..." icon={<MagnifyingGlassIcon />} />;
 }

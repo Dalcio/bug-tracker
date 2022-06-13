@@ -5,12 +5,19 @@ export const useTrackBoardStyles = createStyles((theme) => ({
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
-    '.bordered-container': {
-      flexGrow: 1,
-    },
   },
   body: {
     flexGrow: 1,
     display: 'flex',
+    overflow: 'auto',
+    border: `1px solid ${theme.colors.blue[7]}`,
+    borderRadius: theme.radius.sm,
+    padding: theme.spacing.sm,
+  },
+  tabActive: {
+    color: theme.colors.blue[7],
+  },
+  tabControl: {
+    color: theme.colorScheme === 'light' ? theme.black : theme.white,
   },
 }));

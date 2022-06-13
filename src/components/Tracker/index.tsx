@@ -1,31 +1,25 @@
 import { Stack } from '@mantine/core';
 import { createContext, Dispatch, ReactChild, useContext, useReducer, useState } from 'react';
 
-type StateProps = {};
-
-const INITIAL_STATE = {};
-
-const TrackerContext = createContext<[{}, Dispatch<string>] | []>([]);
-
-const reducer = (state: any, action: string) => {
-  switch (action) {
-    default:
-      return state;
-  }
+type TrackerContextProps = {
+  view: number;
+  toggleView: (currentView: number) => void;
 };
 
+const TrackerContext = createContext<TrackerContextProps>({ view: 0, toggleView: () => {} });
+
 export default function Tracker({ children }: { children: ReactChild[] | ReactChild }) {
+  const [view, setView] = useState<number>(0);
+
+  const toggleView = (currentView: number) => {
+    setView(currentView);
+  };
+
   return (
-    <TrackerContext.Provider value={useReducer(reducer, INITIAL_STATE)}>
+    <TrackerContext.Provider value={{ view, toggleView }}>
       <Stack style={{ flexGrow: 1 }}>{children}</Stack>
     </TrackerContext.Provider>
   );
 }
 
-export const useTracker = () => {
-  const [state, dispatch] = useContext(TrackerContext);
-
-  return {
-    ...(state as StateProps),
-  };
-};
+export const useTracker = () => useContext(TrackerContext);
