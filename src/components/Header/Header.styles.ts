@@ -18,3 +18,45 @@ export const useHeaderStyles = createStyles((theme) => ({
     },
   },
 }));
+
+export const useCollaboratorStyles = createStyles((theme) => ({
+  targetWrapper: {
+    border: 'unset',
+    background: 'transparent',
+    cursor: 'pointer',
+    position: 'relative',
+    ':hover': {
+      opacity: '0.6',
+    },
+    ':after, :before': {
+      content: '""',
+      position: 'absolute',
+      border: `1px dashed ${theme.colors.blue[7]}`,
+      borderRadius: '50%',
+      height: '28px',
+      width: '28px',
+      top: '4px',
+    },
+    ':after': {
+      left: 'calc(50% - 4px)',
+    },
+    ':before': {
+      right: 'calc(50% - 4px)',
+    },
+  },
+  targetContainer: {
+    position: 'relative',
+    zIndex: 1,
+    background: theme.colorScheme === 'dark' ? '#1A1B1E' : theme.white,
+    color: theme.colors.blue[7],
+    border: `1px solid ${theme.colors.blue[7]}`,
+    borderRadius: '50%',
+    height: '36px',
+    width: '36px',
+    display: 'grid',
+    placeItems: 'center',
+    '*': {
+      display: 'inline-block',
+    },
+  },
+}));
