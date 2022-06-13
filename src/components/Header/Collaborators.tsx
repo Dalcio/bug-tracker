@@ -51,7 +51,10 @@ export default function Collaborators() {
           </button>
         </Tooltip>
       }
-      onClose={() => setOpened(false)}
+      onClose={() => {
+        onAdd && setOnAdd(false);
+        setOpened(false);
+      }}
     >
       <Stack p={0}>
         <TextInput
