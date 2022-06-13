@@ -28,7 +28,7 @@ export default function Header() {
             <ColorSchemeToggle />
             <Collaborators />
             <Notifications />
-            <User me />
+            <User />
           </Row>
         </>
       )}
