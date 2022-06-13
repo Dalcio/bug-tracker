@@ -5,6 +5,7 @@ import {
   Avatar,
   Box,
   Button,
+  CloseButton,
   createStyles,
   Popover,
   Stack,
@@ -70,7 +71,10 @@ export default function Collaborators() {
           </Button>
         ) : (
           <form onSubmit={addNewCollaborator}>
-            <Row>
+            <Row spacing="xs" align="center">
+              <Tooltip label="Cancel">
+                <CloseButton onClick={() => setOnAdd(false)} />
+              </Tooltip>
               <TextInput
                 placeholder="Github user email"
                 value={form.values.email}
