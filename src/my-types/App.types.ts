@@ -1,12 +1,20 @@
 import { TTracker } from './Tracker.types';
 
-export type TNotificationType = '';
+export type TNotificationType =
+  | 'add-task'
+  | 'delete-task'
+  | 'move-task'
+  | 'assign-person'
+  | 'collaborator';
+
 export type TNotification = {
   id: string;
   title: string;
-  type: TNotificationType;
+  kind: TNotificationType;
   desc: string;
-  notifiedBy: TCollaborator;
+  notifiedBy: string;
+  // notifiedBy: TCollaborator;
+  date: Date;
 };
 
 export type TUser = {};

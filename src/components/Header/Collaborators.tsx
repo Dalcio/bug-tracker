@@ -42,7 +42,7 @@ export default function Collaborators() {
       opened={opened}
       target={
         <Tooltip label="Collaborators">
-          <button className={classes.targetWrapper} onClick={() => setOpened(true)}>
+          <button className={classes.targetWrapper} onClick={() => setOpened((prev) => !prev)}>
             <Box className={classes.targetContainer}>
               <Text weight={500}>CB</Text>
             </Box>
