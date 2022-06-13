@@ -6,7 +6,7 @@ import { BookmarkIcon, CalendarIcon, MagnifyingGlassIcon } from '@modulz/radix-i
 import { TPriority } from '@my-types/Tracker.types';
 import { useState } from 'react';
 
-import { AssignToProps, PriorityProps, TaskDateProps as DueDateProps } from './Common.props';
+import { AssignToProps, PriorityProps, HandleDateProps } from './Common.props';
 
 export function AssignTo({ assignedPerson, setAssignedPerson }: AssignToProps) {
   const [opened, setOpened] = useState<boolean>(false);
@@ -69,21 +69,21 @@ export function AssignTo({ assignedPerson, setAssignedPerson }: AssignToProps) {
   );
 }
 
-export function Priority({ setPriority, current }: PriorityProps) {
+export function Priority({ setPriority, current, label }: PriorityProps) {
   const [opened, setOpened] = useState<boolean>(false);
 
   const currentPriority = CPriorityWithColors.filter(({ priority }) => priority === current)[0];
 
   const handleSetPriority = (priority: TPriority) => {
     setOpened(false);
-    setPriority(priority);
+    setPriority && setPriority(priority);
   };
 
   return (
     <Popover
       opened={opened}
       target={
-        <Tooltip label="Set Priority">
+        <Tooltip label={label ?? 'Set Priority'}>
           <ActionIcon color={currentPriority.color} onClick={() => setOpened(true)}>
             <BookmarkIcon />
           </ActionIcon>
@@ -108,14 +108,12 @@ export function Priority({ setPriority, current }: PriorityProps) {
   );
 }
 
-export function DueDate({ date, setDate, label }: DueDateProps) {
+export function DateHandler({ date, setDate, label, withHover }: HandleDateProps) {
   const [opened, setOpened] = useState<boolean>(false);
 
   const handleDate = (newDate: Date) => {
     setOpened(false);
-    if (newDate) {
-      setDate(newDate);
-    }
+    newDate && setDate && setDate(newDate);
   };
 
   return (
@@ -129,6 +127,8 @@ export function DueDate({ date, setDate, label }: DueDateProps) {
         </Tooltip>
       }
       onClose={() => setOpened(false)}
+      onMouseOver={() => withHover && setOpened(true)}
+      onMouseOut={() => withHover && setOpened(false)}
     >
       <Calendar value={date} onChange={handleDate} />
     </Popover>

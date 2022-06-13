@@ -9,6 +9,7 @@ export type TTask = {
   desc?: string;
   dueDate?: Date;
   createdAt: Date;
+  tags?: string[];
   priority: TPriority;
 };
 

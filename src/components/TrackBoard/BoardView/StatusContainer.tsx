@@ -7,10 +7,13 @@ import { useStatusStyles } from './BoardView.styles';
 import { StatusContainerProps } from './BoardView.types';
 
 import NewTaskCard from '../TaskCard/NewTaskCard';
+import TaskCard from '../TaskCard/TaskCard';
 
 export default function StatusContainer({ status, numOfTasks, color }: StatusContainerProps) {
   const [onAdding, setOnAdding] = useState<boolean>(false);
   const { classes } = useStatusStyles(color);
+
+  const workspace = 'Workspace';
 
   const addTask = () => setOnAdding(true);
 
@@ -27,7 +30,19 @@ export default function StatusContainer({ status, numOfTasks, color }: StatusCon
         )}
       </Row>
       <Stack className={classes.body}>
-        <h1>Task List</h1>
+        <Stack>
+          <TaskCard
+            id={'Task-id-task-bla'}
+            workspace={workspace}
+            name={'I am the task bla'}
+            assignedTo={'dalcio'}
+            createdAt={new Date()}
+            dueDate={new Date()}
+            priority={'Not Priority'}
+            color={color}
+            tags={['react', 'angular']}
+          />
+        </Stack>
         {(!onAdding && (
           <Button variant="subtle" onClick={addTask} leftIcon={<PlusIcon />} color="gray">
             NEW TASK

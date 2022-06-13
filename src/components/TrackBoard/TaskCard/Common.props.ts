@@ -1,8 +1,9 @@
 import { TPriority } from '@my-types/Tracker.types';
 
 export type PriorityProps = {
-  setPriority: (priority: TPriority) => void;
+  setPriority?: (priority: TPriority) => void;
   current: TPriority;
+  label?: string;
 };
 
 export type TagProps = {};
@@ -12,8 +13,9 @@ export type AssignToProps = {
   setAssignedPerson: (name: string | undefined) => void;
 };
 
-export type TaskDateProps = {
+export type HandleDateProps = {
   label: string;
   date: Date | undefined;
-  setDate: (date: Date | undefined) => void;
+  withHover?: boolean;
+  setDate?: (date: Date | undefined) => void;
 };

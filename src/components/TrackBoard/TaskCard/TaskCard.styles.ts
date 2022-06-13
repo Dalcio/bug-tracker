@@ -20,3 +20,17 @@ export const useNewTaskStyles = (color: TColors) =>
       },
     },
   }))();
+
+export const useTaskCardStyles = (color: TColors) =>
+  createStyles((theme) => ({
+    container: {
+      borderColor: `${theme.colors[color][7]}!important`,
+      borderRadius: '0!important',
+      cursor: 'pointer',
+    },
+    tag: {
+      background: theme.colors.gray[5],
+      padding: '4px',
+      color: theme.black,
+    },
+  }))();

@@ -39,6 +39,7 @@ export default function Collaborators() {
 
   return (
     <Popover
+      placement="end"
       opened={opened}
       target={
         <Tooltip label="Collaborators">

@@ -1,8 +1,7 @@
 import { createStyles } from '@mantine/core';
+import { TColors } from '@my-types/Tracker.types';
 
-import { Colors } from './BoardView.types';
-
-export const useStatusStyles = (color: Colors) =>
+export const useStatusStyles = (color: TColors) =>
   createStyles((theme) => ({
     container: {
       padding: 0,

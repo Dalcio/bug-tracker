@@ -32,6 +32,7 @@ export const useNotificationStyles = (color: string) =>
       borderLeftWidth: '5px',
       borderRadius: theme.radius.sm,
       position: 'relative',
+      width: '360px',
     },
     deleteButton: {
       position: 'absolute',
@@ -75,7 +76,7 @@ function Notification({ kind, id, notifiedBy, date, details, title }: Notificati
 }
 
 export default function Notifications() {
-  const [opened, setOpened] = useState<boolean>(true);
+  const [opened, setOpened] = useState<boolean>(false);
 
   const newNotification = true;
 
@@ -84,6 +85,7 @@ export default function Notifications() {
   return (
     <Popover
       opened={opened}
+      placement="end"
       target={
         <Tooltip className={classes.targetContainer} label="Notifications">
           {newNotification && <Box className={classes.newNotification} />}
@@ -105,6 +107,14 @@ export default function Notifications() {
           notifiedBy="dalcio"
           title="First Notification"
           kind="add-task"
+          details={{}}
+        />
+        <Notification
+          date={new Date()}
+          id="any-id-bla-bla"
+          notifiedBy="dalcio"
+          title="Second Notification"
+          kind="delete-task"
           details={{}}
         />
       </Stack>

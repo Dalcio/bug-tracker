@@ -3,7 +3,7 @@ import { TColors, TPriority, TStatus } from '@my-types/Tracker.types';
 import { Row } from '@styles/core';
 import { useState } from 'react';
 
-import { AssignTo, Priority, DueDate } from './Common';
+import { AssignTo, Priority, DateHandler } from './Common';
 import { useNewTaskStyles } from './TaskCard.styles';
 
 type NewTaskCardProps = {
@@ -30,13 +30,14 @@ export default function NewTaskCard({ color, onCancel }: NewTaskCardProps) {
           placeholder="Task name"
           onChange={(v) => setTitle(v.currentTarget.value)}
           mr="xs"
+          style={{ flexGrow: 1 }}
         />
         <AssignTo assignedPerson={assignedPerson} setAssignedPerson={setAssignedPerson} />
       </Row>
       <Row className={classes.footer} justify="space-between">
         <Row>
           <Priority current={priority} setPriority={setPriority} />
-          <DueDate date={dueDate} setDate={setDueDate} label="Due Date" />
+          <DateHandler date={dueDate} setDate={setDueDate} label="Due Date" />
         </Row>
         <Button
           className={classes.save}
