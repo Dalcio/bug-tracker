@@ -1,11 +1,38 @@
-import { Button, Popover, Text } from '@mantine/core';
+import { DateHandler } from '@components/TrackBoard/TaskCard/Common';
+import { CPriority } from '@constants/Tracker.const';
+import { Button, Checkbox, Popover, Select, Stack, Text } from '@mantine/core';
+import { Calendar, DatePicker } from '@mantine/dates';
 import { MixerVerticalIcon } from '@modulz/radix-icons';
-import { useState } from 'react';
+import { Row } from '@styles/core';
+import { ReactNode, useState } from 'react';
 
-export default function Filter() {
+type FilterProps = {
+  right: ReactNode;
+  isFirst?: boolean;
+};
+
+function Filter({ right, isFirst }: FilterProps) {
+  const [checked, setChecked] = useState(false);
+  const [condition, setCondition] = useState('is');
+
+  return (
+    <Row align="center" justify="space-between">
+      {(!isFirst && <Select data={['and', 'or']} />) || 'Where: '}
+      <Select data={['Priority', 'Created At', 'Due date']} />
+      <Select data={['is', 'is not']} />
+      {right}
+    </Row>
+  );
+}
+
+export default function Filters() {
   const [opened, setOpened] = useState(false);
 
   const handleOpened = () => setOpened((prev) => !prev);
+
+  const onFilter = () => {
+    handleOpened();
+  };
 
   return (
     <Popover
@@ -25,11 +52,16 @@ export default function Filter() {
       }
       withCloseButton
       onClose={handleOpened}
+      closeOnClickOutside={false}
     >
-      <input />
-      Filter Options
-      <input data-autofocus />
-      <input />
+      <Stack>
+        <Filter isFirst right={<Select data={CPriority} />} />
+        <Filter right={<DatePicker />} />
+        <Filter right={<DatePicker />} />
+        <Button fullWidth color="gray" onClick={onFilter}>
+          Ok
+        </Button>
+      </Stack>
     </Popover>
   );
 }
