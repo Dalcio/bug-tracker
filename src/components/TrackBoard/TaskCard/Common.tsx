@@ -121,13 +121,15 @@ export function DateHandler({ date, setDate, label, withHover }: HandleDateProps
       opened={opened}
       target={
         <Tooltip label={label}>
-          <ActionIcon onClick={() => setOpened(true)}>
+          <ActionIcon
+            onClick={() => setOpened(true)}
+            onMouseOver={() => withHover && setOpened(true)}
+          >
             <CalendarIcon />
           </ActionIcon>
         </Tooltip>
       }
       onClose={() => setOpened(false)}
-      onMouseOver={() => withHover && setOpened(true)}
       onMouseOut={() => withHover && setOpened(false)}
     >
       <Calendar value={date} onChange={handleDate} />

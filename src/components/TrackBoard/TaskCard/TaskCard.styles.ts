@@ -34,3 +34,5 @@ export const useTaskCardStyles = (color: TColors) =>
       color: theme.black,
     },
   }))();
+
+export const useAssignedPersonStyles = createStyles(() => ({ avatar: { borderRadius: '50%' } }));

@@ -1,16 +1,6 @@
 import { useTracker } from '@components/Tracker';
-import {
-  ActionIcon,
-  Avatar,
-  Box,
-  Card,
-  createStyles,
-  Popover,
-  Skeleton,
-  Stack,
-  Text,
-} from '@mantine/core';
-import { TextAlignJustifyIcon } from '@modulz/radix-icons';
+import { ActionIcon, Avatar, Box, Card, Popover, Skeleton, Stack, Text } from '@mantine/core';
+import { TextAlignJustifyIcon, TrashIcon } from '@modulz/radix-icons';
 import { TColors, TTask } from '@my-types/Tracker.types';
 import { Row } from '@styles/core';
 import { useEffect, useState } from 'react';
@@ -83,6 +73,10 @@ export default function TaskCard({
   const { editTask } = useTracker();
   const { classes } = useTaskCardStyles(color);
 
+  const onDelete = (_id: string) => {
+    throw new Error('Create the delete function');
+  };
+
   return (
     <Card
       component="button"
@@ -116,10 +110,15 @@ export default function TaskCard({
               </Row>
               <Description id={id} />
             </Row>
-            <Row>
-              <Priority current={priority} label={priority} />
-              <DateHandler withHover label="Created At" date={createdAt} />
-              {dueDate && <DateHandler withHover label="Due date" date={dueDate} />}
+            <Row align="center" justify="space-between">
+              <Row>
+                <Priority current={priority} label={priority} />
+                <DateHandler withHover label="Created At" date={createdAt} />
+                {dueDate && <DateHandler withHover label="Due date" date={dueDate} />}
+              </Row>
+              <ActionIcon color="red" onClick={() => onDelete(id)}>
+                <TrashIcon />
+              </ActionIcon>
             </Row>
           </Stack>
         )}
