@@ -1,46 +1,67 @@
-import Collaborator from '@components/Collaborator';
-import {
-  ActionIcon,
-  Alert,
-  Avatar,
-  Box,
-  Button,
-  CloseButton,
-  createStyles,
-  Popover,
-  Stack,
-  Text,
-  TextInput,
-  Tooltip,
-} from '@mantine/core';
+import { Button, CloseButton, Popover, Stack, Text, TextInput, Tooltip } from '@mantine/core';
 import { useForm } from '@mantine/hooks';
-import { EnvelopeClosedIcon, MagnifyingGlassIcon, PlusIcon } from '@modulz/radix-icons';
+import { MagnifyingGlassIcon, PlusIcon } from '@modulz/radix-icons';
+import { useWorkspaces } from '@store/workspaces';
 import { Row } from '@styles/core';
 import { FormEventHandler, useState } from 'react';
-import { useCollaboratorStyles } from './Header.styles';
 
-export default function Workspaces() {
+const useWorkspaceComponent = () => {
   const [opened, setOpened] = useState<boolean>(false);
   const [onAdd, setOnAdd] = useState<boolean>(false);
 
+  const { changeWorkspace, createWorkspace } = useWorkspaces();
+
   const form = useForm({ initialValues: { workspace: '' } });
 
-  const { classes } = useCollaboratorStyles();
-
-  const searchForWorkSpace = (text: string) => {};
-
   const onAddStart = () => setOnAdd(true);
+
+  const onAddStop = () => setOnAdd(false);
+
+  const onCLose = () => {
+    onAdd && setOnAdd(false);
+    setOpened(false);
+  };
 
   const addWorkspace: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     setOnAdd(false);
     setOpened(false);
-    alert(`An workspace will be sent to ${form.values.workspace}`);
+    createWorkspace(form.values.workspace);
   };
 
   const openWorkspace = (w: string) => {
-    alert('opening this workspace');
+    onCLose();
+    changeWorkspace(w);
   };
+
+  const onOpen = () => setOpened(true);
+
+  return {
+    opened,
+    onAdd,
+    form,
+    addWorkspace,
+    openWorkspace,
+    onOpen,
+    onCLose,
+    onAddStart,
+    onAddStop,
+  };
+};
+
+export default function Workspaces() {
+  const { currentWorkspace, workspaces, filterWorkspace } = useWorkspaces();
+  const {
+    opened,
+    onAdd,
+    form,
+    addWorkspace,
+    openWorkspace,
+    onOpen,
+    onCLose,
+    onAddStart,
+    onAddStop,
+  } = useWorkspaceComponent();
 
   return (
     <Popover
@@ -48,29 +69,25 @@ export default function Workspaces() {
       opened={opened}
       target={
         <Tooltip label="Workspaces">
-          <Button size="sm" variant="outline" onClick={() => setOpened((prev) => !prev)}>
-            <Text weight={500}>Current workspace</Text>
+          <Button size="sm" variant="outline" onClick={onOpen}>
+            <Text weight={500}>{currentWorkspace}</Text>
           </Button>
         </Tooltip>
       }
-      onClose={() => {
-        onAdd && setOnAdd(false);
-        setOpened(false);
-      }}
+      onClose={onCLose}
     >
       <Stack p={0}>
         <TextInput
           icon={<MagnifyingGlassIcon />}
           placeholder="Search github username"
-          onChange={(event) => searchForWorkSpace(event.currentTarget.value)}
+          onChange={(event) => filterWorkspace(event.currentTarget.value)}
         />
         <Stack spacing="xs" style={{ overflowY: 'auto', maxHeight: '200px' }}>
-          <Button onClick={() => openWorkspace('open-this-workspace')} variant="subtle">
-            {'workspca x'}
-          </Button>
-          <Button onClick={() => openWorkspace('open-this-workspace')} variant="subtle">
-            {'workspca y'}
-          </Button>
+          {workspaces.map((name) => (
+            <Button key={name} onClick={() => openWorkspace(name)} variant="subtle">
+              {name}
+            </Button>
+          ))}
         </Stack>
 
         {!onAdd ? (
@@ -81,7 +98,7 @@ export default function Workspaces() {
           <form onSubmit={addWorkspace}>
             <Row align="center" spacing="xs">
               <Tooltip label="Cancel">
-                <CloseButton onClick={() => setOnAdd(false)} />
+                <CloseButton onClick={onAddStop} />
               </Tooltip>
               <TextInput
                 placeholder="New workspace name"

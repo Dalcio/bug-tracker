@@ -8,7 +8,7 @@ export type AppStateProps = {
   workspaces: TWorkspace[];
 };
 
-const appAtom = atom<TUser>({});
+export const appAtom = atom<AppStateProps>({} as AppStateProps);
 
 export const useAppSate = () => {
   const [appState, setAppState] = useAtom(appAtom);
