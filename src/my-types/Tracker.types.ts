@@ -5,7 +5,7 @@ export type TPriorityColor = Record<TPriority, { color: string }>;
 export type TTask = {
   id: string;
   name: string;
-  assignedTo: string;
+  assignedTo?: string;
   desc?: string;
   dueDate?: Date;
   createdAt: Date;

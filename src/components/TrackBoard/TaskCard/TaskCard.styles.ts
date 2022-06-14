@@ -27,6 +27,12 @@ export const useTaskCardStyles = (color: TColors) =>
       borderColor: `${theme.colors[color][7]}!important`,
       borderRadius: '0!important',
       cursor: 'pointer',
+      '.footer': {
+        display: 'none',
+      },
+      ':hover .footer': {
+        display: 'block',
+      },
     },
     tag: {
       background: theme.colors.gray[5],

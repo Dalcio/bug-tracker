@@ -25,7 +25,7 @@ export type TCollaborator = {
 };
 
 export type TWorkspace = {
-  space: string;
+  workspaceName: string;
   notifications: TNotification[];
   collaborators: TCollaborator[];
   tracker: TTracker;

@@ -68,8 +68,6 @@ export default function TaskCard({
   color,
   workspace,
 }: TaskCardProps) {
-  const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
-
   const { editTask } = useTracker();
   const { classes } = useTaskCardStyles(color);
 
@@ -78,13 +76,7 @@ export default function TaskCard({
   };
 
   return (
-    <Card
-      component="button"
-      className={`bordered-container ${classes.container}`}
-      onClick={() => editTask(id)}
-      onMouseOver={() => setIsMouseOver(true)}
-      onMouseLeave={() => setIsMouseOver(false)}
-    >
+    <Box className={`bordered-container ${classes.container}`} onClick={() => editTask(id)}>
       <Stack spacing={0}>
         <Text size="xs" align="left" color="gray">
           {workspace}
@@ -94,35 +86,33 @@ export default function TaskCard({
             {name}
           </Text>
           <Avatar alt={assignedTo} style={{ borderRadius: '50%' }}>
-            {assignedTo.toLocaleUpperCase().substring(0, 2)}
+            {assignedTo && assignedTo.toLocaleUpperCase().substring(0, 2)}
           </Avatar>
         </Row>
-        {isMouseOver && (
-          <Stack p={0} spacing="xs">
-            <Row spacing={'xs'} justify="space-between" align="center">
-              <Row style={{ flexWrap: 'wrap' }} spacing={'xs'}>
-                {tags &&
-                  tags.map((tag) => (
-                    <Box key={tag} className={classes.tag}>
-                      <Text size="xs">{tag}</Text>
-                    </Box>
-                  ))}
-              </Row>
-              <Description id={id} />
+        <Stack className="footer" p={0} spacing="xs">
+          <Row spacing={'xs'} justify="space-between" align="center">
+            <Row style={{ flexWrap: 'wrap' }} spacing={'xs'}>
+              {tags &&
+                tags.map((tag) => (
+                  <Box key={tag} className={classes.tag}>
+                    <Text size="xs">{tag}</Text>
+                  </Box>
+                ))}
             </Row>
-            <Row align="center" justify="space-between">
-              <Row>
-                <Priority current={priority} label={priority} />
-                <DateHandler withHover label="Created At" date={createdAt} />
-                {dueDate && <DateHandler withHover label="Due date" date={dueDate} />}
-              </Row>
-              <ActionIcon color="red" onClick={() => onDelete(id)}>
-                <TrashIcon />
-              </ActionIcon>
+            <Description id={id} />
+          </Row>
+          <Row align="center" justify="space-between">
+            <Row>
+              <Priority current={priority} label={priority} />
+              <DateHandler withHover label="Created At" date={createdAt} />
+              {dueDate && <DateHandler withHover label="Due date" date={dueDate} />}
             </Row>
-          </Stack>
-        )}
+            <ActionIcon color="red" onClick={() => onDelete(id)}>
+              <TrashIcon />
+            </ActionIcon>
+          </Row>
+        </Stack>
       </Stack>
-    </Card>
+    </Box>
   );
 }

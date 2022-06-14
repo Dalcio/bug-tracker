@@ -99,6 +99,7 @@ export function Priority({ setPriority, current, label }: PriorityProps) {
             onClick={() => handleSetPriority(priority)}
             leftIcon={<BookmarkIcon />}
             color={color}
+            key={priority}
           >
             {priority}
           </Button>
