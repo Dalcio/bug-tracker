@@ -1,34 +1,47 @@
-import { useTracker } from '@components/Tracker';
-import { Tabs } from '@mantine/core';
-import { ListBulletIcon, ViewVerticalIcon } from '@modulz/radix-icons';
+import { Row } from '@styles/core';
 
 import { useTrackBoardStyles } from './TrackBoard.styles';
 
-import BoardView from './BoardView';
-import ListView from './ListView';
+import StatusContainer from './StatusContainer';
 
 export default function TrackBoard() {
-  const { classes } = useTrackBoardStyles();
-  const { toggleView, view } = useTracker();
+  const {
+    classes: { container },
+  } = useTrackBoardStyles();
 
   return (
-    <Tabs
-      classNames={{
-        root: classes.root,
-        body: classes.body,
-        tabControl: classes.tabControl,
-        tabActive: classes.tabActive,
-      }}
-      active={view}
-      onTabChange={toggleView}
-      variant="unstyled"
-    >
-      <Tabs.Tab label="List" icon={<ListBulletIcon />}>
-        <ListView />
-      </Tabs.Tab>
-      <Tabs.Tab label="Board" icon={<ViewVerticalIcon />}>
-        <BoardView />
-      </Tabs.Tab>
-    </Tabs>
+    <Row className={`bordered-container ${container}`}>
+      <StatusContainer status="backlog" color="gray" />
+      <StatusContainer status="to-do" color="blue" />
+      <StatusContainer status="doing" color="green" />
+      <StatusContainer status="done" color="red" />
+    </Row>
   );
+
+  // return (
+  //   <DragDropContext onDragEnd={onDragEnd}>
+  //     <Droppable droppableId="numbers">
+  //       {(provided) => (
+  //         <ul ref={provided.innerRef} {...provided.droppableProps}>
+  //           <Draggable draggableId="one" index={0}>
+  //             {(provided) => (
+  //               <li ref={provided.innerRef} {...provided.draggableProps}>
+  //                 <div className="bordered-container">One</div>
+  //               </li>
+  //             )}
+  //           </Draggable>
+  //           <Draggable draggableId="two" index={1}>
+  //             {(provided) => (
+  //               <li ref={provided.innerRef} {...provided.draggableProps}>
+  //                 <div className="bordered-container">One</div>
+  //                 <div className="bordered-container">Two</div>
+  //               </li>
+  //             )}
+  //           </Draggable>
+  //           {provided.placeholder}
+  //         </ul>
+  //       )}
+  //     </Droppable>
+  //   </DragDropContext>
+  // );
 }
