@@ -4,7 +4,8 @@ import { TColors } from '@my-types/Tracker.types';
 export const useTrackBoardStyles = createStyles((theme) => ({
   container: {
     flexGrow: 1,
-    overflow: 'auto',
+    overflowX: 'auto',
+    maxHeight: `calc(100vh - 70px - 62px - 4 *${theme.spacing.md}px)`,
     border: `1px solid ${theme.colors.blue[7]}`,
     borderRadius: theme.radius.sm,
     padding: theme.spacing.sm,
@@ -34,6 +35,7 @@ export const useStatusStyles = (color: TColors) =>
     },
     body: {
       flexGrow: 1,
+      // maxHeight: '100%',
       overflowY: 'auto',
     },
   }))();

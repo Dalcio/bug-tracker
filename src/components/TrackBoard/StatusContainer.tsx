@@ -43,19 +43,21 @@ export default function StatusContainer({ status, numOfTasks, color }: StatusCon
     <Stack p={0} spacing={0} className={classes.container}>
       {Header}
       <Stack p="sm" className={classes.body}>
-        <TaskCard
-          id={'Task-id-task-bla'}
-          workspace={workspace}
-          name={'I am the task bla'}
-          assignedTo={'dalcio'}
-          createdAt={new Date()}
-          dueDate={new Date()}
-          priority={'Not Priority'}
-          color={color}
-          tags={['react', 'angular']}
-        />
+        <Stack p={0}>
+          <TaskCard
+            id={'Task-id-task-bla'}
+            workspace={workspace}
+            name={'I am the task bla'}
+            assignedTo={'dalcio'}
+            createdAt={new Date()}
+            dueDate={new Date()}
+            priority={'Not Priority'}
+            color={color}
+            tags={['react', 'angular']}
+          />
+        </Stack>
         {(!onAdding && (
-          <Button variant="subtle" onClick={addTask} leftIcon={<PlusIcon />} color="gray">
+          <Button variant="subtle" p="sm" onClick={addTask} leftIcon={<PlusIcon />} color="gray">
             NEW TASK
           </Button>
         )) || <NewTaskCard color={color} onCancel={abortAdding} status={status} />}
