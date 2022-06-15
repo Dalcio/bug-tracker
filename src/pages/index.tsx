@@ -1,5 +1,6 @@
 import { Stack } from '@mantine/core';
-import { AppStateProps, useHydrateAppState } from '@store/appState';
+import { TApp } from '@my-types/App.types';
+import { useHydrateAppState } from '@store/appState';
 import { GetServerSideProps } from 'next';
 
 import Header from '@components/Header';
@@ -26,9 +27,9 @@ export default function HomePage({ data }: HomePageProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const data: AppStateProps = {
+  const data: TApp = {
     user: 'dalcio',
-    currentWorkspace: 'bug-tracker',
+    currentWorkspace: ['bug-tracker', 0],
     workspaces: [
       {
         collaborators: [],
@@ -42,6 +43,13 @@ export const getServerSideProps: GetServerSideProps = async () => {
               id: new Date().toLocaleTimeString(),
               name: 'First Task',
               priority: 'High',
+              dueDate: new Date('05-24-2023'),
+            },
+            {
+              createdAt: new Date(),
+              id: new Date().getTimezoneOffset().toString(),
+              name: 'Second Task',
+              priority: 'Low',
               dueDate: new Date('05-24-2023'),
             },
           ],

@@ -1,34 +1,49 @@
 import { Button, CloseButton, Stack, TextInput } from '@mantine/core';
-import { TColors, TPriority, TStatus } from '@my-types/Tracker.types';
+import { TColors, TPriority, TStatus, TTask } from '@my-types/Tracker.types';
+import { useStatus } from '@store/task';
 import { Row } from '@styles/core';
 import { useState } from 'react';
+import { v4 } from 'uuid';
 
 import { AssignTo, Priority, DateHandler } from './Common';
 import { useNewTaskStyles } from './TaskCard.styles';
 
 type NewTaskCardProps = {
-  onCancel: () => void;
+  onClose: () => void;
   status: TStatus;
   color: TColors;
 };
 
-export default function NewTaskCard({ color, onCancel }: NewTaskCardProps) {
-  const [title, setTitle] = useState<string>('');
+export default function NewTaskCard({ color, status, onClose }: NewTaskCardProps) {
+  const [name, setName] = useState<string>('');
   const [assignedPerson, setAssignedPerson] = useState<string | undefined>(undefined);
   const [priority, setPriority] = useState<TPriority>('Not Priority');
   const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
   const { classes } = useNewTaskStyles(color);
+  const { createTask } = useStatus();
 
-  const onSave = () => {};
+  const onSave = () => {
+    const task: TTask = {
+      name,
+      priority,
+      id: v4(),
+      dueDate,
+      assignedTo: assignedPerson,
+      createdAt: new Date(),
+    };
+
+    createTask(status, task);
+    onClose();
+  };
 
   return (
     <Stack className={`bordered-container ${classes.container}`} p="sm">
       <Row spacing={0} className={classes.header}>
-        <CloseButton onClick={onCancel} />
+        <CloseButton onClick={onClose} />
         <TextInput
-          value={title}
+          value={name}
           placeholder="Task name"
-          onChange={(v) => setTitle(v.currentTarget.value)}
+          onChange={(v) => setName(v.currentTarget.value)}
           mr="xs"
           style={{ flexGrow: 1 }}
         />
@@ -44,7 +59,7 @@ export default function NewTaskCard({ color, onCancel }: NewTaskCardProps) {
           onClick={onSave}
           radius="sm"
           size="xs"
-          disabled={title.length === 0}
+          disabled={name.length === 0}
         >
           Save
         </Button>

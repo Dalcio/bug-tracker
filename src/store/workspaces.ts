@@ -1,24 +1,22 @@
-import { TWorkspace } from '@my-types/App.types';
+import { TApp, TCurrentWorkspace, TWorkspace } from '@my-types/App.types';
 import { atom, useAtom } from 'jotai';
-import { useEffect, useState } from 'react';
-import { appAtom, AppStateProps } from './appState';
+import { useEffect } from 'react';
+import { appAtom } from './appState';
 
-const workspacesAtom = atom<TWorkspace[], TWorkspace[] | TWorkspace>(
-  (get) => get<AppStateProps>(appAtom).workspaces,
+export const workspacesAtom = atom<TWorkspace[], TWorkspace[] | TWorkspace>(
+  (get) => get<TApp>(appAtom).workspaces,
   (get, set, update) =>
     set(appAtom, {
-      ...get<AppStateProps>(appAtom),
-      workspaces: Array.isArray(update)
-        ? update
-        : [...get<AppStateProps>(appAtom).workspaces, update],
+      ...get<TApp>(appAtom),
+      workspaces: Array.isArray(update) ? update : [...get<TApp>(appAtom).workspaces, update],
     })
 );
 
-const currentWorkspaceAtom = atom<string, string>(
-  (get) => get<AppStateProps>(appAtom).currentWorkspace,
+export const currentWorkspaceAtom = atom<TCurrentWorkspace, TCurrentWorkspace>(
+  (get) => get<TApp>(appAtom).currentWorkspace,
   (get, set, currentWorkspace) =>
     set(appAtom, {
-      ...get<AppStateProps>(appAtom),
+      ...get<TApp>(appAtom),
       currentWorkspace,
     })
 );
@@ -29,6 +27,8 @@ const workspaceNamesAtom = atom<string[]>((get) =>
     .filter(({ workspaceName }) => workspaceName.includes(get<string>(filterAtom).toLowerCase()))
     .map(({ workspaceName }) => workspaceName)
 );
+
+export const useCurrentWorkspace = () => useAtom(currentWorkspaceAtom)[0];
 
 export const useWorkspaceNames = () => {
   const workspaceNames = useAtom(workspaceNamesAtom)[0];
@@ -41,13 +41,17 @@ export const useWorkspaces = () => {
   const [currentWorkspace, changeWorkspace] = useAtom(currentWorkspaceAtom);
   const [workspaces, setWorkspaces] = useAtom(workspacesAtom);
 
+  useEffect(() => {
+    console.log(workspaces);
+  }, [workspaces]);
+
   const deleteWorkspace = (name: string) => {
     const temp = workspaces.filter(({ workspaceName }) => !workspaceName.includes(name));
 
-    if (temp.length > 0 && currentWorkspace === name) {
-      changeWorkspace(temp[0].workspaceName);
+    if (temp.length > 0 && currentWorkspace[0] === name) {
+      changeWorkspace([temp[0].workspaceName, 0]);
     } else if (temp.length === 0) {
-      changeWorkspace('');
+      changeWorkspace([]);
     }
 
     setWorkspaces(temp);
@@ -70,12 +74,12 @@ export const useWorkspaces = () => {
           done: [],
         },
       };
-      changeWorkspace(name);
+      changeWorkspace([name, workspaces.length]);
       setWorkspaces([...workspaces, newWorkspace]);
     } else {
       alert('The workspace that you are trying to insert already exists');
     }
   };
 
-  return { createWorkspace, changeWorkspace, deleteWorkspace, currentWorkspace };
+  return { createWorkspace, changeWorkspace, deleteWorkspace, currentWorkspace, workspaces };
 };

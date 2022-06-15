@@ -45,9 +45,9 @@ const useWorkspaceComponent = () => {
     createWorkspace(form.values.workspace);
   };
 
-  const openWorkspace = (w: string) => {
+  const openWorkspace = (w: string, idx: number) => {
     // onCLose();
-    changeWorkspace(w);
+    changeWorkspace([w, idx]);
   };
 
   return {
@@ -87,12 +87,13 @@ export default function Workspaces() {
   return (
     <Popover
       placement="end"
+      position="right"
       opened={opened}
       target={
         <Tooltip label="Workspaces">
           <Button size="sm" variant="outline" onClick={handleOpen}>
             <Text weight={500}>
-              {workspaceNames.length > 0 ? currentWorkspace : 'Create new workspace'}
+              {workspaceNames.length > 0 ? currentWorkspace[0] : 'Create new workspace'}
             </Text>
           </Button>
         </Tooltip>
@@ -112,12 +113,12 @@ export default function Workspaces() {
           </Text>
         )}
         <Stack spacing="xs" style={{ overflowY: 'auto', maxHeight: '200px' }}>
-          {workspaceNames.map((name) => (
+          {workspaceNames.map((name, idx) => (
             <Row key={name} align="center" spacing={0}>
               <Button
                 fullWidth
-                disabled={name === currentWorkspace}
-                onClick={() => openWorkspace(name)}
+                disabled={name === currentWorkspace[0]}
+                onClick={() => openWorkspace(name, idx)}
                 variant="subtle"
               >
                 {name}

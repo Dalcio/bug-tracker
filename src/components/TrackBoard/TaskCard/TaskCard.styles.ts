@@ -27,11 +27,30 @@ export const useTaskCardStyles = (color: TColors) =>
       borderColor: `${theme.colors[color][7]}!important`,
       borderRadius: '0!important',
       cursor: 'pointer',
-      '.footer': {
-        display: 'none',
+      '& > *': {
+        width: '100%',
       },
-      ':hover .footer': {
-        display: 'block',
+      '.edit-btn': {
+        visibility: 'hidden',
+      },
+      height: '100px',
+      transition: 'height 0.2s ease-in',
+      '.footer': {
+        transform: 'scaleY(0)',
+        transition: 'transform 0.2s ease-in',
+        transformOrigin: 'top',
+      },
+      ':hover': {
+        height: '166.3px',
+        '.edit-btn': {
+          visibility: 'visible',
+        },
+        '.footer': {
+          transform: 'scaleY(1)',
+        },
+        // '.footer, .edit-btn': {
+        //   // display: 'flex',
+        // },
       },
     },
     tag: {

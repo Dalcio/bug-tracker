@@ -31,7 +31,10 @@ export type TWorkspace = {
   tracker: TTracker;
 };
 
+export type TCurrentWorkspace = [string, number] | [];
+
 export type TApp = {
   user: TUser;
+  currentWorkspace: TCurrentWorkspace;
   workspaces: TWorkspace[];
 };

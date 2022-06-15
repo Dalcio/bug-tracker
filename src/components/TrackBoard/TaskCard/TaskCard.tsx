@@ -1,7 +1,18 @@
 import { useTracker } from '@components/Tracker';
-import { ActionIcon, Avatar, Box, Card, Popover, Skeleton, Stack, Text } from '@mantine/core';
-import { TextAlignJustifyIcon, TrashIcon } from '@modulz/radix-icons';
-import { TColors, TTask } from '@my-types/Tracker.types';
+import {
+  ActionIcon,
+  Avatar,
+  Box,
+  Button,
+  Card,
+  Popover,
+  Skeleton,
+  Stack,
+  Text,
+} from '@mantine/core';
+import { Pencil1Icon, TextAlignJustifyIcon, TrashIcon } from '@modulz/radix-icons';
+import { TColors, TStatus, TTask } from '@my-types/Tracker.types';
+import { useStatus } from '@store/task';
 import { Row } from '@styles/core';
 import { useEffect, useState } from 'react';
 
@@ -11,6 +22,7 @@ import { useTaskCardStyles } from './TaskCard.styles';
 type TaskCardProps = Omit<TTask, 'desc'> & {
   color: TColors;
   workspace: string;
+  status: TStatus;
 };
 
 type DescriptionProps = { id?: string | undefined };
@@ -67,52 +79,60 @@ export default function TaskCard({
   dueDate,
   color,
   workspace,
+  status,
 }: TaskCardProps) {
   const { editTask } = useTracker();
   const { classes } = useTaskCardStyles(color);
-
-  const onDelete = (_id: string) => {
-    throw new Error('Create the delete function');
-  };
+  const { deleteTask } = useStatus();
 
   return (
-    <Box className={`bordered-container ${classes.container}`} onClick={() => editTask(id)}>
-      <Stack spacing={0}>
+    // <Box className={`bordered-container ${classes.container}`}>
+    <Stack className={`bordered-container ${classes.container}`} spacing={0}>
+      <Row justify="space-between" align="center">
         <Text size="xs" align="left" color="gray">
           {workspace}
         </Text>
-        <Row justify="space-between" align="center">
-          <Text size="md" weight={500} align="left">
-            {name}
-          </Text>
-          <Avatar alt={assignedTo} style={{ borderRadius: '50%' }}>
-            {assignedTo && assignedTo.toLocaleUpperCase().substring(0, 2)}
-          </Avatar>
+        <Button
+          leftIcon={<Pencil1Icon />}
+          onClick={() => editTask(id)}
+          color={color}
+          variant="subtle"
+          className="edit-btn"
+        >
+          edit
+        </Button>
+      </Row>
+      <Row justify="space-between" align="center">
+        <Text size="md" weight={500} align="left">
+          {name}
+        </Text>
+        <Avatar alt={assignedTo} style={{ borderRadius: '50%' }}>
+          {assignedTo && assignedTo.toLocaleUpperCase().substring(0, 2)}
+        </Avatar>
+      </Row>
+      <Stack className="footer" p={0} spacing="xs">
+        <Row spacing={'xs'} justify="space-between" align="center">
+          <Row style={{ flexWrap: 'wrap' }} spacing={'xs'}>
+            {tags &&
+              tags.map((tag) => (
+                <Box key={tag} className={classes.tag}>
+                  <Text size="xs">{tag}</Text>
+                </Box>
+              ))}
+          </Row>
+          <Description id={id} />
         </Row>
-        <Stack className="footer" p={0} spacing="xs">
-          <Row spacing={'xs'} justify="space-between" align="center">
-            <Row style={{ flexWrap: 'wrap' }} spacing={'xs'}>
-              {tags &&
-                tags.map((tag) => (
-                  <Box key={tag} className={classes.tag}>
-                    <Text size="xs">{tag}</Text>
-                  </Box>
-                ))}
-            </Row>
-            <Description id={id} />
+        <Row align="center" justify="space-between">
+          <Row>
+            <Priority current={priority} label={priority} />
+            <DateHandler withHover label="Created At" date={createdAt} />
+            {dueDate && <DateHandler withHover label="Due date" date={dueDate} />}
           </Row>
-          <Row align="center" justify="space-between">
-            <Row>
-              <Priority current={priority} label={priority} />
-              <DateHandler withHover label="Created At" date={createdAt} />
-              {dueDate && <DateHandler withHover label="Due date" date={dueDate} />}
-            </Row>
-            <ActionIcon color="red" onClick={() => onDelete(id)}>
-              <TrashIcon />
-            </ActionIcon>
-          </Row>
-        </Stack>
+          <ActionIcon color="red" onClick={() => deleteTask(status, id)}>
+            <TrashIcon />
+          </ActionIcon>
+        </Row>
       </Stack>
-    </Box>
+    </Stack>
   );
 }

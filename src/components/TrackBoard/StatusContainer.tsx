@@ -1,7 +1,6 @@
 import { ActionIcon, Button, Stack, Text } from '@mantine/core';
 import { PlusIcon } from '@modulz/radix-icons';
-import { TColors, TStatus } from '@my-types/Tracker.types';
-import { useWorkspaces } from '@store/workspaces';
+import { TColors, TStatus, TTask } from '@my-types/Tracker.types';
 import { Row } from '@styles/core';
 import { useState } from 'react';
 
@@ -12,8 +11,9 @@ import TaskCard from './TaskCard/TaskCard';
 
 type StatusContainerProps = {
   status: TStatus;
-  numOfTasks?: number;
   color: TColors;
+  currentWorkspace: string;
+  tasks: TTask[];
 };
 
 const useStatusContainer = () => {
@@ -26,8 +26,12 @@ const useStatusContainer = () => {
   return { onAdding, addTask, abortAdding };
 };
 
-export default function StatusContainer({ status, numOfTasks, color }: StatusContainerProps) {
-  const { currentWorkspace } = useWorkspaces();
+export default function StatusContainer({
+  status,
+  currentWorkspace,
+  tasks,
+  color,
+}: StatusContainerProps) {
   const { classes } = useStatusStyles(color);
   const { onAdding, addTask, abortAdding } = useStatusContainer();
 
@@ -35,7 +39,7 @@ export default function StatusContainer({ status, numOfTasks, color }: StatusCon
     <Row className={classes.header}>
       <Row align="center">
         <Text weight={700}>{status.replace('-', ' ')}</Text>
-        {numOfTasks && <Text weight={700}>{numOfTasks}</Text>}
+        {tasks && tasks.length > 0 && <Text weight={700}>{tasks.length}</Text>}
       </Row>
       {!onAdding && (
         <ActionIcon className="add-button" onClick={addTask} size="xl">
@@ -50,23 +54,21 @@ export default function StatusContainer({ status, numOfTasks, color }: StatusCon
       {Header}
       <Stack p="sm" className={classes.body}>
         <Stack p={0}>
-          <TaskCard
-            id={'Task-id-task-bla'}
-            workspace={currentWorkspace}
-            name={'I am the task bla'}
-            assignedTo={'dalcio'}
-            createdAt={new Date()}
-            dueDate={new Date()}
-            priority={'Not Priority'}
-            color={color}
-            tags={['react', 'angular']}
-          />
+          {tasks.map((task) => (
+            <TaskCard
+              key={task.id}
+              {...task}
+              status={status}
+              workspace={currentWorkspace}
+              color={color}
+            />
+          ))}
         </Stack>
         {(!onAdding && (
           <Button variant="subtle" p="sm" onClick={addTask} leftIcon={<PlusIcon />} color="gray">
             NEW TASK
           </Button>
-        )) || <NewTaskCard color={color} onCancel={abortAdding} status={status} />}
+        )) || <NewTaskCard color={color} onClose={abortAdding} status={status} />}
       </Stack>
     </Stack>
   );
