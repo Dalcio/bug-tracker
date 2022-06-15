@@ -1,6 +1,7 @@
-import { ActionIcon, Box, Button, Stack, Text } from '@mantine/core';
+import { ActionIcon, Button, Stack, Text } from '@mantine/core';
 import { PlusIcon } from '@modulz/radix-icons';
 import { TColors, TStatus } from '@my-types/Tracker.types';
+import { useWorkspaces } from '@store/workspaces';
 import { Row } from '@styles/core';
 import { useState } from 'react';
 
@@ -15,15 +16,20 @@ type StatusContainerProps = {
   color: TColors;
 };
 
-export default function StatusContainer({ status, numOfTasks, color }: StatusContainerProps) {
+const useStatusContainer = () => {
   const [onAdding, setOnAdding] = useState<boolean>(false);
-  const { classes } = useStatusStyles(color);
-
-  const workspace = 'Workspace';
 
   const addTask = () => setOnAdding(true);
 
   const abortAdding = () => setOnAdding(false);
+
+  return { onAdding, addTask, abortAdding };
+};
+
+export default function StatusContainer({ status, numOfTasks, color }: StatusContainerProps) {
+  const { currentWorkspace } = useWorkspaces();
+  const { classes } = useStatusStyles(color);
+  const { onAdding, addTask, abortAdding } = useStatusContainer();
 
   const Header = (
     <Row className={classes.header}>
@@ -46,7 +52,7 @@ export default function StatusContainer({ status, numOfTasks, color }: StatusCon
         <Stack p={0}>
           <TaskCard
             id={'Task-id-task-bla'}
-            workspace={workspace}
+            workspace={currentWorkspace}
             name={'I am the task bla'}
             assignedTo={'dalcio'}
             createdAt={new Date()}

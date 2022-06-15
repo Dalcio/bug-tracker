@@ -1,7 +1,16 @@
-import { Button, CloseButton, Popover, Stack, Text, TextInput, Tooltip } from '@mantine/core';
+import {
+  ActionIcon,
+  Button,
+  CloseButton,
+  Popover,
+  Stack,
+  Text,
+  TextInput,
+  Tooltip,
+} from '@mantine/core';
 import { useForm } from '@mantine/hooks';
-import { MagnifyingGlassIcon, PlusIcon } from '@modulz/radix-icons';
-import { useWorkspaces } from '@store/workspaces';
+import { MagnifyingGlassIcon, PlusIcon, TrashIcon } from '@modulz/radix-icons';
+import { useWorkspaces, useWorkspaceNames } from '@store/workspaces';
 import { Row } from '@styles/core';
 import { FormEventHandler, useState } from 'react';
 
@@ -9,13 +18,21 @@ const useWorkspaceComponent = () => {
   const [opened, setOpened] = useState<boolean>(false);
   const [onAdd, setOnAdd] = useState<boolean>(false);
 
-  const { changeWorkspace, createWorkspace } = useWorkspaces();
+  const { currentWorkspace, changeWorkspace, createWorkspace, deleteWorkspace } = useWorkspaces();
+  const { workspaceNames, searchForWorkspace } = useWorkspaceNames();
 
   const form = useForm({ initialValues: { workspace: '' } });
 
   const onAddStart = () => setOnAdd(true);
 
   const onAddStop = () => setOnAdd(false);
+
+  const handleOpen = () => {
+    if (workspaceNames.length === 0) {
+      onAddStart();
+    }
+    setOpened((prev) => !prev);
+  };
 
   const onCLose = () => {
     onAdd && setOnAdd(false);
@@ -24,40 +41,44 @@ const useWorkspaceComponent = () => {
 
   const addWorkspace: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    setOnAdd(false);
-    setOpened(false);
+    onCLose();
     createWorkspace(form.values.workspace);
   };
 
   const openWorkspace = (w: string) => {
-    onCLose();
+    // onCLose();
     changeWorkspace(w);
   };
 
-  const onOpen = () => setOpened(true);
-
   return {
+    currentWorkspace,
     opened,
     onAdd,
     form,
+    deleteWorkspace,
     addWorkspace,
     openWorkspace,
-    onOpen,
+    handleOpen,
     onCLose,
     onAddStart,
     onAddStop,
+    workspaceNames,
+    searchForWorkspace,
   };
 };
 
 export default function Workspaces() {
-  const { currentWorkspace, workspaces, filterWorkspace } = useWorkspaces();
   const {
+    currentWorkspace,
+    workspaceNames,
+    searchForWorkspace,
     opened,
     onAdd,
     form,
+    deleteWorkspace,
     addWorkspace,
     openWorkspace,
-    onOpen,
+    handleOpen,
     onCLose,
     onAddStart,
     onAddStop,
@@ -69,30 +90,50 @@ export default function Workspaces() {
       opened={opened}
       target={
         <Tooltip label="Workspaces">
-          <Button size="sm" variant="outline" onClick={onOpen}>
-            <Text weight={500}>{currentWorkspace}</Text>
+          <Button size="sm" variant="outline" onClick={handleOpen}>
+            <Text weight={500}>
+              {workspaceNames.length > 0 ? currentWorkspace : 'Create new workspace'}
+            </Text>
           </Button>
         </Tooltip>
       }
       onClose={onCLose}
     >
       <Stack p={0}>
-        <TextInput
-          icon={<MagnifyingGlassIcon />}
-          placeholder="Search github username"
-          onChange={(event) => filterWorkspace(event.currentTarget.value)}
-        />
+        {(workspaceNames.length > 0 && (
+          <TextInput
+            icon={<MagnifyingGlassIcon />}
+            placeholder="Search github username"
+            onChange={(event) => searchForWorkspace(event.currentTarget.value)}
+          />
+        )) || (
+          <Text size="lg" weight={600}>
+            First workspace
+          </Text>
+        )}
         <Stack spacing="xs" style={{ overflowY: 'auto', maxHeight: '200px' }}>
-          {workspaces.map((name) => (
-            <Button key={name} onClick={() => openWorkspace(name)} variant="subtle">
-              {name}
-            </Button>
+          {workspaceNames.map((name) => (
+            <Row key={name} align="center" spacing={0}>
+              <Button
+                fullWidth
+                disabled={name === currentWorkspace}
+                onClick={() => openWorkspace(name)}
+                variant="subtle"
+              >
+                {name}
+              </Button>
+              <Tooltip label="Delete workspace">
+                <ActionIcon size="lg" color="red" onClick={() => deleteWorkspace(name)}>
+                  <TrashIcon />
+                </ActionIcon>
+              </Tooltip>
+            </Row>
           ))}
         </Stack>
 
         {!onAdd ? (
           <Button variant="subtle" onClick={onAddStart} leftIcon={<PlusIcon />} color="gray">
-            New Collaborator
+            New Workspace
           </Button>
         ) : (
           <form onSubmit={addWorkspace}>

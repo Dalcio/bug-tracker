@@ -3,44 +3,64 @@ import { atom, useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { appAtom, AppStateProps } from './appState';
 
-const workspacesAtom = atom((get) => {
-  const { workspaces, currentWorkspace } = get<AppStateProps>(appAtom);
+const workspacesAtom = atom<TWorkspace[], TWorkspace[] | TWorkspace>(
+  (get) => get<AppStateProps>(appAtom).workspaces,
+  (get, set, update) =>
+    set(appAtom, {
+      ...get<AppStateProps>(appAtom),
+      workspaces: Array.isArray(update)
+        ? update
+        : [...get<AppStateProps>(appAtom).workspaces, update],
+    })
+);
 
-  return { workspaces, currentWorkspace };
-});
+const currentWorkspaceAtom = atom<string, string>(
+  (get) => get<AppStateProps>(appAtom).currentWorkspace,
+  (get, set, currentWorkspace) =>
+    set(appAtom, {
+      ...get<AppStateProps>(appAtom),
+      currentWorkspace,
+    })
+);
+
+const filterAtom = atom('');
+const workspaceNamesAtom = atom<string[]>((get) =>
+  get<TWorkspace[]>(workspacesAtom)
+    .filter(({ workspaceName }) => workspaceName.includes(get<string>(filterAtom).toLowerCase()))
+    .map(({ workspaceName }) => workspaceName)
+);
+
+export const useWorkspaceNames = () => {
+  const workspaceNames = useAtom(workspaceNamesAtom)[0];
+  const searchForWorkspace = useAtom(filterAtom)[1];
+
+  return { searchForWorkspace, workspaceNames };
+};
 
 export const useWorkspaces = () => {
-  const [w] = useAtom(workspacesAtom);
-  const [, setW] = useAtom(appAtom);
-  const [workspaces, setWorkSpaces] = useState<string[]>([]);
+  const [currentWorkspace, changeWorkspace] = useAtom(currentWorkspaceAtom);
+  const [workspaces, setWorkspaces] = useAtom(workspacesAtom);
 
-  useEffect(() => {
-    const temWorkspace = w.workspaces.map(({ workspaceName }) => workspaceName);
-    setWorkSpaces([...temWorkspace]);
-  }, [w]);
+  const deleteWorkspace = (name: string) => {
+    const temp = workspaces.filter(({ workspaceName }) => !workspaceName.includes(name));
 
-  const filterWorkspace = (str: string) => {
-    if (str.length > 0) {
-      const filtered = workspaces.filter((v) => v.includes(str));
-      setWorkSpaces([...filtered]);
-    } else {
-      const temWorkspace = w.workspaces.map(({ workspaceName }) => workspaceName);
-      setWorkSpaces([...temWorkspace]);
+    if (temp.length > 0 && currentWorkspace === name) {
+      changeWorkspace(temp[0].workspaceName);
+    } else if (temp.length === 0) {
+      changeWorkspace('');
     }
-  };
 
-  const changeWorkspace = (target: string) => {
-    if (target !== w.currentWorkspace) {
-      setW((prev) => ({ ...prev, currentWorkspace: target }));
-    }
+    setWorkspaces(temp);
   };
 
   const createWorkspace = (name: string) => {
-    const idx = workspaces.findIndex((value) => value.toLowerCase() === name.toLowerCase());
+    const idx = workspaces.findIndex(
+      ({ workspaceName }) => workspaceName.toLowerCase() === name.toLowerCase()
+    );
 
     if (idx) {
       const newWorkspace: TWorkspace = {
-        workspaceName: name,
+        workspaceName: name.toLowerCase(),
         collaborators: [],
         notifications: [],
         tracker: {
@@ -50,22 +70,12 @@ export const useWorkspaces = () => {
           done: [],
         },
       };
-
-      setW((prev) => ({
-        ...prev,
-        currentWorkspace: name,
-        workspaces: [...prev.workspaces, newWorkspace],
-      }));
+      changeWorkspace(name);
+      setWorkspaces([...workspaces, newWorkspace]);
     } else {
       alert('The workspace that you are trying to insert already exists');
     }
   };
 
-  return {
-    currentWorkspace: w.currentWorkspace,
-    workspaces,
-    createWorkspace,
-    changeWorkspace,
-    filterWorkspace,
-  };
+  return { createWorkspace, changeWorkspace, deleteWorkspace, currentWorkspace };
 };
