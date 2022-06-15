@@ -37,20 +37,20 @@ export default function NewTaskCard({ color, status, onClose }: NewTaskCardProps
   };
 
   return (
-    <Stack className={`bordered-container ${classes.container}`} p="sm">
-      <Row spacing={0} className={classes.header}>
+    <Stack className={classes.container} p="sm">
+      <Row spacing={0} p={0} align="center">
         <CloseButton onClick={onClose} />
         <TextInput
           value={name}
           placeholder="Task name"
           onChange={(v) => setName(v.currentTarget.value)}
           mr="xs"
-          style={{ flexGrow: 1 }}
+          style={{ flexGrow: 1, display: 'flex' }}
         />
         <AssignTo assignedPerson={assignedPerson} setAssignedPerson={setAssignedPerson} />
       </Row>
-      <Row className={classes.footer} justify="space-between">
-        <Row>
+      <Row p={0} justify="space-between">
+        <Row p={0}>
           <Priority current={priority} setPriority={setPriority} />
           <DateHandler date={dueDate} setDate={setDueDate} label="Due Date" />
         </Row>

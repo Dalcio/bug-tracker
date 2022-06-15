@@ -24,6 +24,7 @@ export const useStatusStyles = (color: TColors) =>
       borderTopWidth: '4px',
     },
     header: {
+      height: '69px',
       justifyContent: 'space-between',
       alignItems: 'center',
       padding: theme.spacing.sm,
@@ -35,7 +36,6 @@ export const useStatusStyles = (color: TColors) =>
     },
     body: {
       flexGrow: 1,
-      // maxHeight: '100%',
       overflowY: 'auto',
     },
   }))();
