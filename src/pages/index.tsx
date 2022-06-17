@@ -7,6 +7,8 @@ import Header from '@components/Header';
 import TrackBoard from '@components/TrackBoard';
 import Tracker from '@components/Tracker';
 import TrackOptions from '@components/TrackOptions';
+import { useEffect, useState } from 'react';
+import { v4 } from 'uuid';
 
 type HomePageProps = {
   data: string;
@@ -14,15 +16,25 @@ type HomePageProps = {
 
 export default function HomePage({ data }: HomePageProps) {
   useHydrateAppState(JSON.parse(data));
+  const [windowIsReady, setWindowIsReady] = useState(false);
+
+  useEffect(() => {
+    if (!windowIsReady) {
+      setWindowIsReady(true);
+    }
+  }, []);
 
   return (
-    <Stack p="md" style={{ height: '100vh' }}>
-      <Header />
-      <Tracker>
-        <TrackOptions />
-        <TrackBoard />
-      </Tracker>
-    </Stack>
+    (windowIsReady && (
+      <Stack p="md" style={{ height: '100vh' }}>
+        <Header />
+        <Tracker>
+          <TrackOptions />
+          <TrackBoard />
+        </Tracker>
+      </Stack>
+    )) ||
+    null
   );
 }
 
@@ -40,14 +52,14 @@ export const getServerSideProps: GetServerSideProps = async () => {
           'to-do': [
             {
               createdAt: new Date(),
-              id: new Date().toLocaleTimeString(),
+              id: v4(),
               name: 'First Task',
               priority: 'High',
               dueDate: new Date('05-24-2023'),
             },
             {
               createdAt: new Date(),
-              id: new Date().getTimezoneOffset().toString(),
+              id: v4(),
               name: 'Second Task',
               priority: 'Low',
               dueDate: new Date('05-24-2023'),

@@ -19,6 +19,7 @@ export const useTaskCardStyles = (color: TColors) =>
       borderColor: `${theme.colors[color][7]}!important`,
       borderRadius: '0!important',
       cursor: 'pointer',
+      userSelect: 'none',
       '& > *': {
         width: '100%',
       },

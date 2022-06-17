@@ -38,5 +38,18 @@ export const useStatus = () => {
     }
   };
 
-  return { createTask, deleteTask };
+  const reorderSameOrigin = (status: string, sIdx: number, dIdx: number) => {
+    if (currWorkspaceIdx !== undefined) {
+      const tasks = getStatus(status as TStatus);
+
+      const [removed] = tasks.splice(sIdx, 1);
+      tasks.splice(dIdx, 0, removed);
+
+      const tempWorkspace = [...workspaces];
+      tempWorkspace[currWorkspaceIdx].tracker[status as TStatus] = [...tasks];
+      setWorkspaces([...tempWorkspace]);
+    }
+  };
+
+  return { createTask, deleteTask, reorderSameOrigin };
 };

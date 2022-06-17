@@ -8,6 +8,7 @@ import { useStatusStyles } from './TrackBoard.styles';
 
 import NewTaskCard from './TaskCard/NewTaskCard';
 import TaskCard from './TaskCard/TaskCard';
+import { Droppable } from 'react-beautiful-dnd';
 
 type StatusContainerProps = {
   status: TStatus;
@@ -53,17 +54,25 @@ export default function StatusContainer({
     <Stack p={0} spacing={0} className={classes.container}>
       {Header}
       <Stack p="sm" className={classes.body}>
-        <Stack p={0}>
-          {tasks.map((task) => (
-            <TaskCard
-              key={task.id}
-              {...task}
-              status={status}
-              workspace={currentWorkspace}
-              color={color}
-            />
-          ))}
-        </Stack>
+        <Droppable droppableId={status}>
+          {(providedDroppable, _snapshot) => (
+            <Stack p={0} {...providedDroppable.droppableProps} ref={providedDroppable.innerRef}>
+              <>
+                {tasks.map((task, index) => (
+                  <TaskCard
+                    key={task.id}
+                    index={index}
+                    {...task}
+                    status={status}
+                    workspace={currentWorkspace}
+                    color={color}
+                  />
+                ))}
+              </>
+              {providedDroppable.placeholder}
+            </Stack>
+          )}
+        </Droppable>
         {(!onAdding && (
           <Button variant="subtle" p="sm" onClick={addTask} leftIcon={<PlusIcon />} color="gray">
             NEW TASK
