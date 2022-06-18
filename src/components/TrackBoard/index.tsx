@@ -7,6 +7,7 @@ import { useTrackBoardStyles } from './TrackBoard.styles';
 
 import StatusContainer from './StatusContainer';
 import { useStatus } from '@store/task';
+import { TStatus } from '@my-types/Tracker.types';
 
 export default function TrackBoard() {
   const {
@@ -15,7 +16,7 @@ export default function TrackBoard() {
   const currentWorkspace = useCurrentWorkspace()[0];
   const { currentTracker } = useCurrentTracker();
 
-  const { reorderSameOrigin } = useStatus();
+  const { reorder, moveTask } = useStatus();
 
   const onDragEnd: DragDropContextProps['onDragEnd'] = (result) => {
     const { source, destination } = result;
@@ -27,8 +28,9 @@ export default function TrackBoard() {
     const dId = destination.droppableId;
 
     if (sId === dId) {
-      reorderSameOrigin(sId, source.index, destination.index);
+      reorder(sId as TStatus, source.index, destination.index);
     } else {
+      moveTask(sId as TStatus, source.index, dId as TStatus, destination.index);
     }
   };
 

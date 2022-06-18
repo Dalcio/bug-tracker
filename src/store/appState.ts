@@ -12,5 +12,3 @@ export const useAppSate = () => {
 
 export const useHydrateAppState = (initialState: TApp) =>
   useHydrateAtoms([[appAtom, initialState]] as const);
-
-// export const getUser = atom((get) => get(appAtom));

@@ -1,6 +1,6 @@
 import { TApp, TCurrentWorkspace, TWorkspace } from '@my-types/App.types';
 import { atom, useAtom } from 'jotai';
-import { useEffect } from 'react';
+
 import { appAtom } from './appState';
 
 export const workspacesAtom = atom<TWorkspace[], TWorkspace[] | TWorkspace>(
@@ -40,10 +40,6 @@ export const useWorkspaceNames = () => {
 export const useWorkspaces = () => {
   const [currentWorkspace, changeWorkspace] = useAtom(currentWorkspaceAtom);
   const [workspaces, setWorkspaces] = useAtom(workspacesAtom);
-
-  useEffect(() => {
-    console.log(workspaces);
-  }, [workspaces]);
 
   const deleteWorkspace = (name: string) => {
     const temp = workspaces.filter(({ workspaceName }) => !workspaceName.includes(name));

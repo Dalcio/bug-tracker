@@ -38,4 +38,7 @@ export const useStatusStyles = (color: TColors) =>
       flexGrow: 1,
       overflowY: 'auto',
     },
+    draggableSpace: {
+      minHeight: '50px',
+    },
   }))();

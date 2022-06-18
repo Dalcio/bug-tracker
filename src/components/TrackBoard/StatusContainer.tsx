@@ -3,12 +3,12 @@ import { PlusIcon } from '@modulz/radix-icons';
 import { TColors, TStatus, TTask } from '@my-types/Tracker.types';
 import { Row } from '@styles/core';
 import { useState } from 'react';
+import { Droppable } from 'react-beautiful-dnd';
 
 import { useStatusStyles } from './TrackBoard.styles';
 
 import NewTaskCard from './TaskCard/NewTaskCard';
 import TaskCard from './TaskCard/TaskCard';
-import { Droppable } from 'react-beautiful-dnd';
 
 type StatusContainerProps = {
   status: TStatus;
@@ -55,8 +55,13 @@ export default function StatusContainer({
       {Header}
       <Stack p="sm" className={classes.body}>
         <Droppable droppableId={status}>
-          {(providedDroppable, _snapshot) => (
-            <Stack p={0} {...providedDroppable.droppableProps} ref={providedDroppable.innerRef}>
+          {(providedDroppable, snapshot) => (
+            <Stack
+              className={classes.draggableSpace}
+              p={0}
+              {...providedDroppable.droppableProps}
+              ref={providedDroppable.innerRef}
+            >
               <>
                 {tasks.map((task, index) => (
                   <TaskCard
