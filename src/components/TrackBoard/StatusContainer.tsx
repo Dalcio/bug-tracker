@@ -1,4 +1,4 @@
-import { ActionIcon, Button, Stack, Text } from '@mantine/core';
+import { ActionIcon, Button, Stack, Text, Tooltip } from '@mantine/core';
 import { PlusIcon } from '@modulz/radix-icons';
 import { TColors, TStatus, TTask } from '@my-types/Tracker.types';
 import { Row } from '@styles/core';
@@ -43,9 +43,11 @@ export default function StatusContainer({
         {tasks && tasks.length > 0 && <Text weight={700}>{tasks.length}</Text>}
       </Row>
       {!onAdding && (
-        <ActionIcon className="add-button" onClick={addTask} size="xl">
-          <PlusIcon />
-        </ActionIcon>
+        <Tooltip label="Add new task">
+          <ActionIcon className="add-button" onClick={addTask} size="xl">
+            <PlusIcon />
+          </ActionIcon>
+        </Tooltip>
       )}
     </Row>
   );
@@ -53,11 +55,12 @@ export default function StatusContainer({
   return (
     <Stack p={0} spacing={0} className={classes.container}>
       {Header}
-      <Stack p="sm" className={classes.body}>
-        <Droppable droppableId={status}>
-          {(providedDroppable, snapshot) => (
+      <Droppable droppableId={status}>
+        {(providedDroppable, _snapshot) => (
+          <Stack p="sm" className={classes.body}>
+            {onAdding && <NewTaskCard color={color} onClose={abortAdding} status={status} />}
             <Stack
-              className={classes.draggableSpace}
+              className={(!onAdding && classes.draggableSpace) || undefined}
               p={0}
               {...providedDroppable.droppableProps}
               ref={providedDroppable.innerRef}
@@ -76,14 +79,20 @@ export default function StatusContainer({
               </>
               {providedDroppable.placeholder}
             </Stack>
-          )}
-        </Droppable>
-        {(!onAdding && (
-          <Button variant="subtle" p="sm" onClick={addTask} leftIcon={<PlusIcon />} color="gray">
-            NEW TASK
-          </Button>
-        )) || <NewTaskCard color={color} onClose={abortAdding} status={status} />}
-      </Stack>
+            {!onAdding && tasks.length === 0 && (
+              <Button
+                variant="subtle"
+                p="sm"
+                onClick={addTask}
+                leftIcon={<PlusIcon />}
+                color="gray"
+              >
+                NEW TASK
+              </Button>
+            )}
+          </Stack>
+        )}
+      </Droppable>
     </Stack>
   );
 }

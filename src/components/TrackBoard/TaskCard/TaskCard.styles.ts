@@ -33,7 +33,7 @@ export const useTaskCardStyles = (color: TColors) =>
         transition: 'transform 0.2s ease-in',
         transformOrigin: 'top',
       },
-      ':hover': {
+      ':hover, :active': {
         height: '166.3px',
         '.edit-btn': {
           visibility: 'visible',
@@ -41,9 +41,6 @@ export const useTaskCardStyles = (color: TColors) =>
         '.footer': {
           transform: 'scaleY(1)',
         },
-        // '.footer, .edit-btn': {
-        //   // display: 'flex',
-        // },
       },
     },
     tag: {

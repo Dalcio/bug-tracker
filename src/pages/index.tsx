@@ -1,14 +1,15 @@
 import { Stack } from '@mantine/core';
 import { TApp } from '@my-types/App.types';
 import { useHydrateAppState } from '@store/appState';
+import { Row } from '@styles/core';
 import { GetServerSideProps } from 'next';
+import { useEffect, useState } from 'react';
+import { v4 } from 'uuid';
 
 import Header from '@components/Header';
 import TrackBoard from '@components/TrackBoard';
 import Tracker from '@components/Tracker';
-import TrackOptions from '@components/TrackOptions';
-import { useEffect, useState } from 'react';
-import { v4 } from 'uuid';
+import SearchTask from '@components/TrackBoard/SearchTask';
 
 type HomePageProps = {
   data: string;
@@ -29,7 +30,9 @@ export default function HomePage({ data }: HomePageProps) {
       <Stack p="md" style={{ height: '100vh' }}>
         <Header />
         <Tracker>
-          <TrackOptions />
+          <Row className="bordered-container" justify="space-between">
+            <SearchTask />
+          </Row>
           <TrackBoard />
         </Tracker>
       </Stack>

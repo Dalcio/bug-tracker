@@ -1,3 +1,5 @@
+import { TStatus } from '@my-types/Tracker.types';
+import { useStatus } from '@store/task';
 import { useCurrentTracker } from '@store/tracker';
 import { useCurrentWorkspace } from '@store/workspaces';
 import { Row } from '@styles/core';
@@ -6,8 +8,6 @@ import { DragDropContext, DragDropContextProps } from 'react-beautiful-dnd';
 import { useTrackBoardStyles } from './TrackBoard.styles';
 
 import StatusContainer from './StatusContainer';
-import { useStatus } from '@store/task';
-import { TStatus } from '@my-types/Tracker.types';
 
 export default function TrackBoard() {
   const {
