@@ -1,11 +1,47 @@
 import { TApp, TUser } from '@my-types/App.types';
 import { atom, useAtom } from 'jotai';
+import { useState } from 'react';
+
 import { appAtom } from './appState';
 
-const userAtom = atom<TUser>((get) => get<TApp>(appAtom).user);
+const userAtom = atom<TUser | undefined, TUser | undefined>(
+  (get) => get<TApp>(appAtom).user,
+  (get, set, user) =>
+    set(appAtom, {
+      ...get<TApp>(appAtom),
+      user,
+    })
+);
 
 export const getUser = () => {
   const [user] = useAtom(userAtom);
 
-  return user ?? null;
+  return user ?? undefined;
+};
+
+export const useAuth = () => {
+  const [, setUser] = useAtom(userAtom);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const signIn = async () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setUser({
+        email: 'dalsiomacuetegarcia@gmail.com',
+        name: 'Dálcio Garcia',
+        username: 'dalcio',
+      });
+      setIsLoading(false);
+    }, 4 * 1000);
+  };
+
+  const signOut = async () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setUser(undefined);
+      setIsLoading(false);
+    }, 4 * 1000);
+  };
+
+  return { signIn, signOut, isLoading };
 };

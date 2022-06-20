@@ -1,10 +1,11 @@
 import { Button } from '@mantine/core';
+import { useAuth } from '@store/user';
 
 export default function SignInButton() {
-  const onSignIn = () => {};
+  const { signIn, isLoading } = useAuth();
 
   return (
-    <Button variant="light" onClick={onSignIn}>
+    <Button variant="light" loading={isLoading} onClick={signIn}>
       Sign in with github
     </Button>
   );

@@ -42,8 +42,11 @@ export default function HomePage({ data }: HomePageProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
+  // if authenticated get from firebase
+
+  // else get from cookies if there's a workspace else set empty
   const data: TApp = {
-    user: 'dalcio',
+    user: undefined,
     currentWorkspace: ['bug-tracker', 0],
     workspaces: [
       {

@@ -8,6 +8,7 @@ import { DragDropContext, DragDropContextProps } from 'react-beautiful-dnd';
 import { useTrackBoardStyles } from './TrackBoard.styles';
 
 import StatusContainer from './StatusContainer';
+import { Text } from '@mantine/core';
 
 const useDragAndDrop = () => {
   const { reorder, moveTask } = useStatus();
@@ -69,7 +70,12 @@ export default function TrackBoard() {
           />
         </DragDropContext>
       </Row>
-    )) ||
-    null
+    )) || (
+      <Row className={`bordered-container ${container}`} justify="center" align="center">
+        <Text  size="xl" weight={700}>
+          There's no workspace, please create one.
+        </Text>
+      </Row>
+    )
   );
 }

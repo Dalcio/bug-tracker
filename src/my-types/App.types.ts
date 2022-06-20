@@ -17,11 +17,13 @@ export type TNotification = {
   date: Date;
 };
 
-export type TUser = {};
-
 export type TCollaborator = {
   name: string;
   email: string;
+};
+
+export type TUser = TCollaborator & {
+  username: string;
 };
 
 export type TWorkspace = {
@@ -34,7 +36,7 @@ export type TWorkspace = {
 export type TCurrentWorkspace = [string, number] | [];
 
 export type TApp = {
-  user: TUser;
+  user: TUser | undefined;
   currentWorkspace: TCurrentWorkspace;
   workspaces: TWorkspace[];
 };

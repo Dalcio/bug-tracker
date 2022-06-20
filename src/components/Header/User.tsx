@@ -9,6 +9,7 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { EnvelopeClosedIcon } from '@modulz/radix-icons';
+import { getUser, useAuth } from '@store/user';
 import { Row } from '@styles/core';
 import { useState } from 'react';
 
@@ -23,23 +24,26 @@ export default function User() {
 
   const { classes } = useUserStyles();
 
-  const user = 'Dalcio';
-  const name = 'Dálcio Garcia';
-  const email = 'dalciomacuetegarcia@gmail.com';
+  const user = getUser();
+  const { signOut, isLoading } = useAuth();
+
+  if (!user) return null;
+
+  const { email, name, username } = user;
 
   return (
     <Popover
       opened={opened}
       placement="end"
       target={
-        <Tooltip label={user}>
+        <Tooltip label={name}>
           <ActionIcon
             onClick={() => setOpened((prev) => !prev)}
             size="xl"
             style={{ borderRadius: '50%' }}
           >
-            <Avatar className={classes.avatar} alt={user}>
-              {user.toLocaleUpperCase().substring(0, 2)}
+            <Avatar className={classes.avatar} alt={username}>
+              {username.toLocaleUpperCase().substring(0, 2)}
             </Avatar>
           </ActionIcon>
         </Tooltip>
@@ -47,11 +51,11 @@ export default function User() {
       onClose={() => setOpened(false)}
     >
       <Stack align="center">
-        <Avatar className={classes.avatar} size="xl" alt={user}>
-          {user.toLocaleUpperCase().substring(0, 2)}
+        <Avatar className={classes.avatar} size="xl" alt={username}>
+          {username.toLocaleUpperCase().substring(0, 2)}
         </Avatar>
         <Text size="lg" weight={500} align="center">
-          {user.toLocaleLowerCase()}
+          {username.toLocaleLowerCase()}
         </Text>
         <Text align="left">{name}</Text>
         <Row align="center">
@@ -63,9 +67,12 @@ export default function User() {
           color="gray"
           fullWidth
           target="_blank"
-          href={`https://github.com/${user}`}
+          href={`https://github.com/${username}`}
         >
-          View Profile
+          View Github Profile
+        </Button>
+        <Button color="red" loading={isLoading} onClick={signOut} variant="subtle" fullWidth>
+          Sign out
         </Button>
       </Stack>
     </Popover>
