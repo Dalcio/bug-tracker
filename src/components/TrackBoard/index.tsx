@@ -9,13 +9,7 @@ import { useTrackBoardStyles } from './TrackBoard.styles';
 
 import StatusContainer from './StatusContainer';
 
-export default function TrackBoard() {
-  const {
-    classes: { container },
-  } = useTrackBoardStyles();
-  const currentWorkspace = useCurrentWorkspace()[0];
-  const { currentTracker } = useCurrentTracker();
-
+const useDragAndDrop = () => {
   const { reorder, moveTask } = useStatus();
 
   const onDragEnd: DragDropContextProps['onDragEnd'] = (result) => {
@@ -34,34 +28,48 @@ export default function TrackBoard() {
     }
   };
 
+  return { onDragEnd };
+};
+
+export default function TrackBoard() {
+  const {
+    classes: { container },
+  } = useTrackBoardStyles();
+  const currentWorkspace = useCurrentWorkspace()[0];
+  const { currentTracker } = useCurrentTracker();
+  const { onDragEnd } = useDragAndDrop();
+
   return (
-    <Row className={`bordered-container ${container}`}>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <StatusContainer
-          currentWorkspace={currentWorkspace ?? ''}
-          tasks={currentTracker.backlog || []}
-          status="backlog"
-          color="gray"
-        />
-        <StatusContainer
-          currentWorkspace={currentWorkspace ?? ''}
-          tasks={currentTracker['to-do'] || []}
-          status="to-do"
-          color="blue"
-        />
-        <StatusContainer
-          currentWorkspace={currentWorkspace ?? ''}
-          tasks={currentTracker.doing || []}
-          status="doing"
-          color="green"
-        />
-        <StatusContainer
-          currentWorkspace={currentWorkspace ?? ''}
-          tasks={currentTracker.done || []}
-          status="done"
-          color="red"
-        />
-      </DragDropContext>
-    </Row>
+    (currentWorkspace && (
+      <Row className={`bordered-container ${container}`}>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <StatusContainer
+            currentWorkspace={currentWorkspace}
+            tasks={currentTracker.backlog || []}
+            status="backlog"
+            color="gray"
+          />
+          <StatusContainer
+            currentWorkspace={currentWorkspace}
+            tasks={currentTracker['to-do'] || []}
+            status="to-do"
+            color="blue"
+          />
+          <StatusContainer
+            currentWorkspace={currentWorkspace}
+            tasks={currentTracker.doing || []}
+            status="doing"
+            color="green"
+          />
+          <StatusContainer
+            currentWorkspace={currentWorkspace}
+            tasks={currentTracker.done || []}
+            status="done"
+            color="red"
+          />
+        </DragDropContext>
+      </Row>
+    )) ||
+    null
   );
 }

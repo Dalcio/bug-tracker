@@ -1,6 +1,7 @@
 import { Modal, Stack } from '@mantine/core';
 import { createContext, ReactChild, useContext, useState } from 'react';
-import EditTask from './EditTask';
+
+import EditTask from '../TrackBoard/EditTask';
 
 type TrackerContextProps = {
   editTask: (id: string) => void;

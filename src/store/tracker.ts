@@ -13,7 +13,10 @@ const currentTrackerAtom = atom<TTracker | undefined>((get) => {
   const app = get<TApp>(appAtom);
   const idx = app.currentWorkspace[1];
   const filterQuery = get(filterAtom);
+
   if (idx === undefined) return undefined;
+  if (!app.workspaces[idx]?.tracker) return undefined;
+
   const currWorkspaceTracker = app.workspaces[idx].tracker;
 
   const tracker = { ...currWorkspaceTracker };

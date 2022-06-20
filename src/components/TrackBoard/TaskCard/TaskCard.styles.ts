@@ -1,6 +1,8 @@
 import { createStyles } from '@mantine/core';
 import { TColors } from '@my-types/Tracker.types';
 
+import { useResize } from '../util';
+
 export const useNewTaskStyles = (color: TColors) =>
   createStyles((theme) => ({
     container: {
@@ -13,13 +15,17 @@ export const useNewTaskStyles = (color: TColors) =>
     },
   }))();
 
-export const useTaskCardStyles = (color: TColors) =>
-  createStyles((theme) => ({
+export const useTaskCardStyles = (color: TColors) => {
+  const { width } = useResize();
+
+  return createStyles((theme) => ({
     container: {
       borderColor: `${theme.colors[color][7]}!important`,
       borderRadius: '0!important',
       cursor: 'pointer',
       userSelect: 'none',
+      // minWidth: '253px',
+      width: `max(100%, calc(${width} - 4 * ${theme.spacing.md}))`,
       '& > *': {
         width: '100%',
       },
@@ -49,5 +55,5 @@ export const useTaskCardStyles = (color: TColors) =>
       color: theme.black,
     },
   }))();
-
+};
 export const useAssignedPersonStyles = createStyles(() => ({ avatar: { borderRadius: '50%' } }));

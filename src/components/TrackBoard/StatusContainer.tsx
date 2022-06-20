@@ -2,7 +2,7 @@ import { ActionIcon, Button, Stack, Text, Tooltip } from '@mantine/core';
 import { PlusIcon } from '@modulz/radix-icons';
 import { TColors, TStatus, TTask } from '@my-types/Tracker.types';
 import { Row } from '@styles/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 
 import { useStatusStyles } from './TrackBoard.styles';
