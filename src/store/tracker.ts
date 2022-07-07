@@ -11,38 +11,40 @@ const filterAtom = atom('');
 
 const currentTrackerAtom = atom<TTracker | undefined>((get) => {
   const app = get<TApp>(appAtom);
-  const idx = app.currentWorkspace[1];
-  const filterQuery = get(filterAtom);
+  if (app) {
+    const idx = app.currentWorkspace[1];
+    const filterQuery = get(filterAtom);
 
-  if (idx === undefined) return undefined;
-  if (!app.workspaces[idx]?.tracker) return undefined;
+    if (idx === undefined) return undefined;
+    if (!app.workspaces[idx]?.tracker) return undefined;
 
-  const currWorkspaceTracker = app.workspaces[idx].tracker;
+    const currWorkspaceTracker = app.workspaces[idx].tracker;
 
-  const tracker = { ...currWorkspaceTracker };
+    const tracker = { ...currWorkspaceTracker };
 
-  tracker.backlog = currWorkspaceTracker.backlog.filter(({ name, priority }) =>
-    name.toLowerCase().includes(get(searchAtom)) && filterQuery.length > 0
-      ? eval(filterQuery)
-      : true
-  );
-  tracker['to-do'] = currWorkspaceTracker['to-do'].filter(({ name, priority }) =>
-    name.toLowerCase().includes(get(searchAtom)) && filterQuery.length > 0
-      ? eval(filterQuery)
-      : true
-  );
-  tracker.doing = currWorkspaceTracker.doing.filter(({ name, priority }) =>
-    name.toLowerCase().includes(get(searchAtom)) && filterQuery.length > 0
-      ? eval(filterQuery)
-      : true
-  );
-  tracker.done = currWorkspaceTracker.done.filter(({ name, priority }) =>
-    name.toLowerCase().includes(get(searchAtom)) && filterQuery.length > 0
-      ? eval(filterQuery)
-      : true
-  );
+    tracker.backlog = currWorkspaceTracker.backlog.filter(({ name, priority }) =>
+      name.toLowerCase().includes(get(searchAtom)) && filterQuery.length > 0
+        ? eval(filterQuery)
+        : true
+    );
+    tracker['to-do'] = currWorkspaceTracker['to-do'].filter(({ name, priority }) =>
+      name.toLowerCase().includes(get(searchAtom)) && filterQuery.length > 0
+        ? eval(filterQuery)
+        : true
+    );
+    tracker.doing = currWorkspaceTracker.doing.filter(({ name, priority }) =>
+      name.toLowerCase().includes(get(searchAtom)) && filterQuery.length > 0
+        ? eval(filterQuery)
+        : true
+    );
+    tracker.done = currWorkspaceTracker.done.filter(({ name, priority }) =>
+      name.toLowerCase().includes(get(searchAtom)) && filterQuery.length > 0
+        ? eval(filterQuery)
+        : true
+    );
 
-  return tracker;
+    return tracker;
+  }
 });
 
 export const useSearchTask = () => useAtom(searchAtom);

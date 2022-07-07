@@ -7,9 +7,12 @@ import { currentWorkspaceAtom, workspacesAtom } from './workspaces';
 
 const statusAtom = atom<(s: TStatus) => TTask[]>((get) => (status) => {
   const app = get<TApp>(appAtom);
-  const idx = app.currentWorkspace[1];
 
-  if (idx !== undefined && idx >= 0) return app.workspaces[idx].tracker[status] ?? [];
+  if (app) {
+    const idx = app.currentWorkspace[1];
+
+    if (idx !== undefined && idx >= 0) return app.workspaces[idx].tracker[status] ?? [];
+  }
 
   return [];
 });

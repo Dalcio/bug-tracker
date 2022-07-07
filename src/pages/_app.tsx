@@ -1,9 +1,10 @@
 import { GetServerSidePropsContext } from 'next';
 import { useState } from 'react';
-import { AppProps } from 'next/app';
-import { getCookie, setCookies } from 'cookies-next';
+import { APP_COLOR_SCHEME_COOKIE } from '@constants';
 import { MantineProvider, ColorScheme, ColorSchemeProvider } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
+import { AppProps } from 'next/app';
+import { getCookie, setCookies } from 'cookies-next';
 
 import Head from 'next/head';
 import GlobalStyles from '@styles/GlobalStyles';
@@ -15,7 +16,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const toggleColorScheme = (value?: ColorScheme) => {
     const nextColorScheme = value || (colorScheme === 'dark' ? 'light' : 'dark');
     setColorScheme(nextColorScheme);
-    setCookies('bug-tracker-color-scheme', nextColorScheme, { maxAge: 60 * 60 * 24 * 30 });
+    setCookies(APP_COLOR_SCHEME_COOKIE, nextColorScheme, { maxAge: 60 * 60 * 24 * 30 });
   };
 
   return (
@@ -39,5 +40,5 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 }
 
 App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
-  colorScheme: getCookie('bug-tracker-color-scheme', ctx) || 'light',
+  colorScheme: getCookie(APP_COLOR_SCHEME_COOKIE, ctx) || 'dark',
 });

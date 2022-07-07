@@ -5,10 +5,10 @@ import { useState } from 'react';
 import { appAtom } from './appState';
 
 const userAtom = atom<TUser | undefined, TUser | undefined>(
-  (get) => get<TApp>(appAtom).user,
+  (get) => get<TApp>(appAtom)?.user ?? undefined,
   (get, set, user) =>
     set(appAtom, {
-      ...get<TApp>(appAtom),
+      ...(get<TApp>(appAtom) ?? { currentWorkspace: [], workspaces: [] }),
       user,
     })
 );
@@ -21,6 +21,7 @@ export const getUser = () => {
 
 export const useAuth = () => {
   const [, setUser] = useAtom(userAtom);
+  const [, setApp] = useAtom(appAtom);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const signIn = async () => {
@@ -38,7 +39,7 @@ export const useAuth = () => {
   const signOut = async () => {
     setIsLoading(true);
     setTimeout(() => {
-      setUser(undefined);
+      setApp({} as TApp);
       setIsLoading(false);
     }, 4 * 1000);
   };

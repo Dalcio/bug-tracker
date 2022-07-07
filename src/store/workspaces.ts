@@ -4,7 +4,7 @@ import { atom, useAtom } from 'jotai';
 import { appAtom } from './appState';
 
 export const workspacesAtom = atom<TWorkspace[], TWorkspace[] | TWorkspace>(
-  (get) => get<TApp>(appAtom).workspaces,
+  (get) => get<TApp>(appAtom)?.workspaces ?? [],
   (get, set, update) =>
     set(appAtom, {
       ...get<TApp>(appAtom),
@@ -13,7 +13,7 @@ export const workspacesAtom = atom<TWorkspace[], TWorkspace[] | TWorkspace>(
 );
 
 export const currentWorkspaceAtom = atom<TCurrentWorkspace, TCurrentWorkspace>(
-  (get) => get<TApp>(appAtom).currentWorkspace,
+  (get) => get<TApp>(appAtom)?.currentWorkspace ?? [],
   (get, set, currentWorkspace) =>
     set(appAtom, {
       ...get<TApp>(appAtom),
